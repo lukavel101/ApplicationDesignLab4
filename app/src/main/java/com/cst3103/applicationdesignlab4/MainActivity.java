@@ -1,10 +1,6 @@
 package com.cst3103.applicationdesignlab4;
 
-
-
-
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -20,44 +16,44 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Log.w( "MainActivity", "In onCreate() - Loading Widgets");
+        Log.w("MainActivity", "In onCreate() - Loading Widgets");
 
-
+        // Find and reference the login button and email edit text from the XML layout
         Button loginButton = findViewById(R.id.button);
         EditText emailEditText = findViewById(R.id.editTextText);
 
-        Intent next = new Intent( MainActivity.this, SecondActivity.class);
+        // Create an intent to navigate to the SecondActivity
+        Intent next = new Intent(MainActivity.this, SecondActivity.class);
 
+        // Get the text from the email edit text and add it to the intent
         next.putExtra("EmailAddress", emailEditText.getText().toString());
-        next.putExtra("Age", 21);
-        next.putExtra("Name", "Luka Veljovic");
-        next.putExtra("PostalCode", "K2S2M7");
 
+        // Access the SharedPreferences for storing data
         SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
 
-
+        // Set an onClickListener for the login button
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Get the entered email address
                 String emailAddress = emailEditText.getText().toString();
 
+                // Edit the SharedPreferences to store the email address
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("LoginName", emailAddress);
-                editor.putInt("Age", 20);  // Fixed the age value
-                editor.apply();
+                editor.apply(); // Apply the changes
 
+                // Create an intent to navigate to SecondActivity and pass the email address
                 Intent nextPage = new Intent(MainActivity.this, SecondActivity.class);
-                nextPage.putExtra("EmailAddress", emailAddress);  // Fixed the Intent line
-                startActivity(nextPage);
+                nextPage.putExtra("EmailAddress", emailAddress);
+                startActivity(nextPage); // Start SecondActivity
             }
         });
 
-
+        // Retrieve the saved email address from SharedPreferences and set it in the email edit text
         String savedEmailAddress = prefs.getString("LoginName", "");
         emailEditText.setText(savedEmailAddress);
-
     }
-
 
     @Override
     protected void onStart() {
@@ -88,7 +84,5 @@ public class MainActivity extends AppCompatActivity {
         Log.w("MainActivity", "The application is now destroyed.");
         super.onDestroy();
     }
-
-
-
 }
+
